@@ -1,0 +1,293 @@
+@startuml
+hide empty members
+set namespaceSeparator none
+
+interface "/user" {
+}
+
+class "GET /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string authToken
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "PUT /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "POST /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "DELETE /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+"/user" ..> "DELETE /user"
+"/user" ..> "GET /user"
+"/user" ..> "POST /user"
+"/user" ..> "PUT /user"
+
+
+
+interface "/auth" {
+}
+
+class "GET /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+{field} string authToken
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "PUT /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "POST /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "DELETE /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+"/auth" ..> "DELETE /auth"
+"/auth" ..> "GET /auth"
+"/auth" ..> "POST /auth"
+"/auth" ..> "PUT /auth"
+
+
+
+interface "/meet" {
+}
+
+class "GET /meet" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>meetingId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "PUT /meet" {
+.. header ..
+{field} string userId
+{field} string <b>authToken</b>
+.. query ..
+{field} string <b>meetingId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "POST /meet" {
+.. header ..
+{field} string <b>userId</b>
+{field} string authToken
+.. query ..
+{field} string <b>meetingId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+"/meet" ..> "GET /meet"
+"/meet" ..> "POST /meet"
+"/meet" ..> "PUT /meet"
+
+
+
+interface "/schedule" {
+}
+
+class "GET /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. query ..
+{field} integer range
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "POST /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "PUT /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "DELETE /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+"/schedule" ..> "DELETE /schedule"
+"/schedule" ..> "GET /schedule"
+"/schedule" ..> "POST /schedule"
+"/schedule" ..> "PUT /schedule"
+
+
+
+interface "/media" {
+}
+
+class "GET /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "POST /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "PUT /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "DELETE /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+"/media" ..> "DELETE /media"
+"/media" ..> "GET /media"
+"/media" ..> "POST /media"
+"/media" ..> "PUT /media"
+
+
+
+interface "/media/stream" {
+}
+
+class "GET /media/stream" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+class "POST /media/stream" {
+.. header ..
+{field} string <b>userId</b>
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+}
+
+
+
+"/media/stream" ..> "GET /media/stream"
+"/media/stream" ..> "POST /media/stream"
+
+
+
+@enduml

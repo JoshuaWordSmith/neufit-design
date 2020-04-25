@@ -82,6 +82,24 @@ Services:
   - GET: retrieve information such as metadata or thumbnail mediaIds for a stream
   - POST: create a new streaming session with the server, and exchange a callback function and callback url to establish a websocket connection (to stream video that is not live)
 
+## Detailed API Specification
+
+An initial draft of the api specification for this project was created in yaml following the OpenAPI 3.0 specification. It goes into greater detail what the API looks like, and I made a documentation site for it if you'd like to view it.
+
+The yaml file is about 20 pages of text if dropped into a PDF so I'm not including it in this document.
+
+To view the interactive specification go to https://joshuawordsmith.github.io/neufit-design/#editor
+
+If you are unfamiliar with the OpenAPI spec you can change the contents of the left window to see how they change the interface. Expand the dropdowns and schemas to see the request/response details
+
+![api editor app](editor.png)
+
+There are a couple different documentation formats available on that site, and the raw yaml file can be found at https://joshuawordsmith.github.io/neufit-design/swagger.yaml
+
+There are other presentations of the api spec available in the other navigation menu links
+
+**NOTE:** this site was created quickly and I only tried it with Chrome on macOS Mojave. I have no idea if the editor works on other browsers, and because most of the content is generated, I can't speak to if it is WCAG compliant
+
 ## High level design
 
 At a high-level we would need the following components:

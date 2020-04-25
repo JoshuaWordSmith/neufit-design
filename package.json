@@ -13,7 +13,8 @@
     "install:plugin": "cd plugin/swagger-editor && npm i",
     "set:swagger": "node -e 'require(\"fs\").writeFileSync(\"plugin/swagger-editor/src/plugins/local-storage/petstore.js\", `const swag = require(\"../../../../../swagger.yaml\");export default swag;`);'",
     "build:editor": "cd plugin/swagger-editor && npm run build && copy:editor",
-    "copy:editor": "cp plugin/swagger-editor/index.html src/editor && cp -r plugin/swagger-editor/dist src/editor/dist"
+    "copy:editor": "cp plugin/swagger-editor/index.html src/editor && cp -r plugin/swagger-editor/dist src/editor/dist",
+    "convert:uml": "python swagger_to_uml.py"
   },
   "dependencies": {
     "http-server": "^0.12.1"

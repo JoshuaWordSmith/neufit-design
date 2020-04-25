@@ -46,7 +46,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: customerId_1
+                  role:
+                    type: string
+                    enum: [customer, instructor]
+                    example: customer
+                  subscriptions:
+                    type: array
+                    items: {}
+                    example:
+                      - instructorId_2
+                      - instructorId_3
+                      - instructorId_4
     put:
       tags:
         - User
