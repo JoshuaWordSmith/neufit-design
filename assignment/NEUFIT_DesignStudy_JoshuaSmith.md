@@ -1,5 +1,9 @@
 # Designing NEUFIT
 
+- Author: Joshua Smith
+- Due: April 24th
+- Class: Scalable Distributed Systems
+
 A design document for the creation of an on demand fitness streaming service offering One on one coaching, group classes, community, and multimedia offerings.
 
 Similar products: Competitors include Peleton Digital (Group classes), Trainiac (on demand workouts and instruction), and GymGo (One on one personal coaching). Similar products range from videoconferencing products like Zoom, to educational platforms like Treehouse.
@@ -86,7 +90,7 @@ Services:
 
 An initial draft of the api specification for this project was created in yaml following the OpenAPI 3.0 specification. It goes into greater detail what the API looks like, and I made a documentation site for it if you'd like to view it.
 
-The yaml file is about 20 pages of text if dropped into a PDF so I'm not including it in this document.
+The yaml file is about 20 pages of text if dropped into a PDF so I'm not including it in this document. Instead I made a simple web app to host the API spec
 
 To view the interactive specification go to https://joshuawordsmith.github.io/neufit-design/#editor
 
@@ -94,7 +98,7 @@ If you are unfamiliar with the OpenAPI spec you can change the contents of the l
 
 ![api editor app](editor.png)
 
-There are a couple different documentation formats available on that site, and the raw yaml file can be found at https://joshuawordsmith.github.io/neufit-design/docs/swagger.yaml
+I included a couple different documentation formats on there, but the raw yaml file can be found at https://joshuawordsmith.github.io/neufit-design/docs/swagger.yaml
 
 There are other presentations of the api spec available in the other navigation menu links
 
@@ -104,21 +108,47 @@ There are other presentations of the api spec available in the other navigation 
 
 At a high-level we would need the following components:
 
-1.Processing Queue:​ Each uploaded video will be pushed to a processing queue to be de-queued later for encoding, thumbnail generation, and storage.
-2.Encoder:​ To encode each uploaded video into multiple formats.
-3.Thumbnails generator:​ To generate a few thumbnails for each video.
-4.Video and Thumbnail storage:​ To store video and thumbnail files in some distributed file storage.
-5.User Database:​ To store user’s information, e.g., name, email, address, etc.
-6.Video metadata storage:​ A metadata database to store all the information about videos like title, file path in the system, uploading user, total views, likes, dislikes, etc. It will also be used to store all the video comments.
+1. Processing Queue:​ Each uploaded video will be pushed to a processing queue to be de-queued later for encoding, thumbnail generation, and storage.
+2. Encoder:​ To encode each uploaded video into multiple formats.
+3. Thumbnails generator:​ To generate a few thumbnails for each video.
+4. Video and Thumbnail storage:​ To store video and thumbnail files in some distributed file storage.
+5. User Database:​ To store user’s information, e.g., name, email, address, etc.
+6. Video metadata storage:​ A metadata database to store all the information about a video
 
-## Required content
+![component outline](../docs/mod-swagger.png)
 
-Provide a capacity planning, design detail for this platform. Suppose a few thousand people each use it from different global locations. How do you estimate the number of sessions, number of concurrent sessions (CCU) and translate that to an infrastructure design (i. e., Cloud with VMs or Docker containers).
+## Example data flows
 
-What are the key considerations in terms of replications and fault tolerance (Ch. 18)? Invoke 4 key distributed systems concepts from Ch. 18 and explain in 1-2 paragraph each how they can be addressed for the NEUFIT platform. Use diagrams as needed.
+### User login flow
 
-What are the key considerations in terms of Security of the platform (Ch. 11)? Invoke 4 key distributed systems concepts from Ch. 11 and explain in 1-2 paragraph each how they can be addressed for the NEUFIT platform. Use diagrams as needed.
+![login flow](../docs/login-flow.png)
 
-What are the key considerations in terms of Multimedia (Ch. 19)? Invoke 4 key distributed systems concepts from Ch. 18 and explain in 1-2 paragraph each how they can be addressed for the NEUFIT platform. Use diagrams as needed.
+### Streaming video flow
 
-What are the key considerations in terms of Multimedia (Ch. 20)? Invoke 4 key distributed systems concepts from Ch. 20 and explain in 1-2 paragraph each how they can be addressed for the NEUFIT platform. Use diagrams as needed.
+![stream video flow](../docs/stream-video.png)
+
+## Fault tolerances
+
+This applcation will rely on Active replication to ensure fault tolerance that can achieve faster response time than linearized replication would allow during streaming sessions. It's not a big deal if frames are dropped here or there, as long as the framerate is prioritized over resolution and the client has a steady connection.
+
+The replication managers will permit some faults (ones that wont cascade) in order to prioritize the framerate. Since the system is distributed across n clients, and it would be reasonable to assume that clients may be changing from wifi to mobile data, or hopping between mobile towers, the replication managers will need to account for changing callback urls and websocket connections.
+
+Since all replication managers process the same sequence of events, and have sequential consistency, we have a fault tolerant system because we dont care that much about recovering dropped data during a live stream, just that we can pick them back up as soon as possible.
+
+## Security
+
+The primary focus for security is on PII (personally identifying information), payments and stored payment methods, and ensuring one on one streams cannot be intercepted.
+
+While we will secure all uploaded media, and all group classes, those use cases don't present as significant of a security risk if someone can view a group class that they would be able to attend if they had a paid membership.
+
+Payment method storage and secure transactions will be handled by a third party. There generally just isn't a very good reason to manage credit card data and secure payment other than integrating a third party vendor that uses OAuth 2.0. Credit card transactions will be handled between the client and vendor directly, and only when a user attempts to access something that requires payment will we check their status.
+
+For checking payment status, or checking anything that is non public from the /users service, we will be using digital signatures with private keys for each client/service exchange, in addition to creating a JWT with public encryption as an identifier for any action taken that doesn't require auth, primarily for record keeping and identifying a client without needing to log/reference actual encrypted tokens (which could present a security risk)
+
+## Multimedia considerations
+
+To achieve Synchronous distributed state all streaming data will go through the media/stream service (not RESTfully, it's just that the stateful streaming service is behind the /media/stream service until the stream is established) so that we can connect the users to the proper replication manager and monitor the latency between a frame being broadcast and its reception.
+
+To achieve External synchronization (workout timer, ui updates, rep counters) we will rely on this system as well, which will require some processing of the frames in flight. It will be largely handled by the client, and the client will be diffing it's current counters with the shared global state
+
+We want to avoid doing much video processing other than compression and encoding, becuase we want video to go from one client to another with as little interference from the server as possible.

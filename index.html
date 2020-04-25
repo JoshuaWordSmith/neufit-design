@@ -107,15 +107,17 @@
       width: 100%;
       height: 80vh;
       text-align: center;
-      /* margin-top: 45vh; */
       font-size: 32px;
       overflow: hidden;
-      /* position: absolute; */
-      /* z-index: -1; */
     }
 
     #zoomImg {
       width: 100vw;
+      display: none;
+    }
+
+    .embed-heading:target+#zoomImg {
+      display: initial;
     }
   </style>
   <script>
@@ -164,7 +166,7 @@
   </div>
   <div class="container">
     <h2 class="embed-heading" id="plantuml" style="visibility: hidden;height: 0px;margin:0;margin-top:-30px;">Plant UML diagram</h2>
-    <img id="zoomImg" class="main-doc" src="docs/_swagger.png">
+    <img id="zoomImg" class="main-doc" src="docs/mod-swagger.png">
     <script type="text/javascript" src="src/main.js"></script>
   </div>
 </body>
