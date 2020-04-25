@@ -117,6 +117,8 @@ At a high-level we would need the following components:
 
 ![component outline](../docs/mod-swagger.png)
 
+view this png in the browser at https://joshuawordsmith.github.io/neufit-design/#plantuml and click on the image to zoom in
+
 ## Example data flows
 
 ### User login flow
