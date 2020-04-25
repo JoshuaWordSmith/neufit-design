@@ -1,0 +1,10 @@
+@startuml
+title User Log in\n
+client -> "/auth" : \tPOST\nusername/password
+"/auth" -> "AuthDatabase" : authToken
+
+"/auth" --> client : \tRESPONSE\n\tauthToken
+
+client -> "/user" : \n\n\t\tGET\n\tauthToken/userId
+"/user" --> client : \tRESPONSE\n\tuser profile data
+@enduml

@@ -94,7 +94,7 @@ If you are unfamiliar with the OpenAPI spec you can change the contents of the l
 
 ![api editor app](editor.png)
 
-There are a couple different documentation formats available on that site, and the raw yaml file can be found at https://joshuawordsmith.github.io/neufit-design/swagger.yaml
+There are a couple different documentation formats available on that site, and the raw yaml file can be found at https://joshuawordsmith.github.io/neufit-design/docs/swagger.yaml
 
 There are other presentations of the api spec available in the other navigation menu links
 

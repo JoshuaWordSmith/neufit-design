@@ -8,13 +8,14 @@
   "scripts": {
     "start": "yarn http-server . -p 1337",
     "postinstall": "printf \"yarn init:project - fully build the project, this is slow and only needs to run once\nyarn build:editor - update the swagger editor page with the latest local swagger doc\nyarn start - serve the project on port 1337\nyarn http-server . 0000 - replace 0000 with the port of your choice\n\n\"",
-    "init:project": "yarn fetch:plugin && yarn install:plugin && yarn set:swagger && yarn build:editor",
+    "init:project": "yarn fetch:plugin && yarn install:plugin && yarn build:editor",
     "fetch:plugin": "node -e '!require(\"fs\").existsSync(\"plugin/swagger-editor\") && function(){console.log(\"cloning swagger editor\"); console.log(require(\"child_process\").execSync(\"git clone git@github.com:swagger-api/swagger-editor.git plugin/swagger-editor/\").output); return true;}() || console.log(\"swagger editor exists, skipping clone\");'",
     "install:plugin": "cd plugin/swagger-editor && npm i",
-    "set:swagger": "node -e 'require(\"fs\").writeFileSync(\"plugin/swagger-editor/src/plugins/local-storage/petstore.js\", `const swag = require(\"../../../../../swagger.yaml\");export default swag;`);'",
-    "build:editor": "cd plugin/swagger-editor && npm run build && copy:editor",
+    "set:swagger": "node -e 'require(\"fs\").writeFileSync(\"plugin/swagger-editor/src/plugins/local-storage/petstore.js\", `const swag = require(\"../../../../../docs/swagger.yaml\");export default swag;`);'",
+    "build:editor": "yarn set:swagger && cd plugin/swagger-editor && npm run build && yarn copy:editor",
     "copy:editor": "cp plugin/swagger-editor/index.html src/editor && cp -r plugin/swagger-editor/dist src/editor/dist",
-    "convert:uml": "python swagger_to_uml.py"
+    "convert:uml": "python swagger_to_uml.py",
+    "convert:uml:modified": "python swagger_to_uml.py docs/_swagger.puml docs/_swagger.png"
   },
   "dependencies": {
     "http-server": "^0.12.1"

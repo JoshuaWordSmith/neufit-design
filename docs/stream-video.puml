@@ -1,0 +1,39 @@
+@startuml
+title Streaming video flow\n
+client -> "/media/stream" : \t\tGET\nheaders: userId/authToken\nurl param: ?mediaId=illtijv3
+activate "/media/stream"
+"/media/stream" -> "/auth" : \t\tGET\nheaders: userId/authToken
+
+activate "/auth"
+"/auth" -> AuthDatabase : validateSessionToken
+AuthDatabase --> "/auth" : isValid: true
+"/auth" --> "/media/stream" : isValid: true
+deactivate "/auth"
+
+"/media/stream" -> MediaDatabase : \n\tRETRIEVE\n  Media metadata
+MediaDatabase --> "/media/stream" : \n\tRESPONSE\nMedia metadata
+
+"/media/stream" --> client : \tRESPONSE\nMedia metadata
+deactivate "/media/stream"
+
+client -> "/media/stream" : \t\tPOST\nheaders: userId/authToken\nurl param: ?mediaId=illtijv3\nrequestBody: callbackUrl
+activate "/media/stream"
+"/media/stream" -> "/auth" : \t\tGET\nheaders: userId/authToken
+
+activate "/auth"
+"/auth" -> AuthDatabase : validateSessionToken
+AuthDatabase --> "/auth" : isValid: true
+"/auth" --> "/media/stream" : isValid: true
+deactivate "/auth"
+
+"/media/stream" -> "MediaCache" : \nGET\nhttps://media.endpoint/illtijv3
+
+"/media/stream" --> client : \tRESPONSE\nWebsocket Callback
+deactivate "/media/stream"
+"client" <-> MediaCache : \nDatastream via websockets
+
+
+
+
+
+@enduml

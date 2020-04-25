@@ -1,0 +1,369 @@
+@startuml
+hide empty members
+set namespaceSeparator none
+
+interface "/user" {
+}
+
+class "GET /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string authToken
+.. responses ..
+200: {field} User 
+}
+
+"GET /user" ..> User
+
+class "PUT /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+{field} string <b>authToken</b>
+.. body ..
+{field} string displayName - UpdateUserRequest
+{field} integer zipCode - UpdateUserRequest
+{field} string[] subscriptions - UpdateUserRequest
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "POST /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+.. body ..
+{field} string displayName - UpdateUserRequest
+{field} integer zipCode - UpdateUserRequest
+{field} string[] subscriptions - UpdateUserRequest
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "DELETE /user" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+"/user" ..> "DELETE /user"
+"/user" ..> "GET /user"
+"/user" ..> "POST /user"
+"/user" ..> "PUT /user"
+
+
+
+interface "/auth" {
+}
+
+class "GET /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+{field} string authToken
+.. responses ..
+200: {field} LoginResponse 
+}
+
+"GET /auth" ..> LoginResponse
+
+class "PUT /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} LoginResponse 
+}
+
+"PUT /auth" ..> LoginResponse
+
+class "POST /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+.. responses ..
+200: {field} LoginResponse 
+}
+
+"POST /auth" ..> LoginResponse
+
+class "DELETE /auth" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>userPassword</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+"/auth" ..> "DELETE /auth"
+"/auth" ..> "GET /auth"
+"/auth" ..> "POST /auth"
+"/auth" ..> "PUT /auth"
+
+
+
+interface "/meet" {
+}
+
+class "GET /meet" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>meetingId</b>
+.. responses ..
+200: {field} MeetingInformation 
+}
+
+"GET /meet" ..> MeetingInformation
+
+class "PUT /meet" {
+.. header ..
+{field} string userId
+{field} string <b>authToken</b>
+.. query ..
+{field} string <b>meetingId</b>
+.. body ..
+{field} string startTime - UpdateMeetingRequest
+{field} string endTime - UpdateMeetingRequest
+{field} string[] users - UpdateMeetingRequest
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "POST /meet" {
+.. header ..
+{field} string <b>userId</b>
+{field} string authToken
+.. query ..
+{field} string <b>meetingId</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+"/meet" ..> "GET /meet"
+"/meet" ..> "POST /meet"
+"/meet" ..> "PUT /meet"
+
+
+
+interface "/schedule" {
+}
+
+class "GET /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. query ..
+{field} integer range
+.. responses ..
+200: {field} ScheduleData 
+}
+
+"GET /schedule" ..> ScheduleData
+
+class "POST /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. body ..
+{field} string userId - AddToSchedule
+{field} string startTime - AddToSchedule
+{field} string endTime - AddToSchedule
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "PUT /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. body ..
+{field} string userId - AddToSchedule
+{field} string startTime - AddToSchedule
+{field} string endTime - AddToSchedule
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "DELETE /schedule" {
+.. header ..
+{field} string <b>userId</b>
+{field} string <b>authToken</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+"/schedule" ..> "DELETE /schedule"
+"/schedule" ..> "GET /schedule"
+"/schedule" ..> "POST /schedule"
+"/schedule" ..> "PUT /schedule"
+
+
+
+interface "/media" {
+}
+
+class "GET /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} image/* 
+200: {field} video/* 
+}
+
+
+
+class "POST /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "PUT /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "DELETE /media" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+"/media" ..> "DELETE /media"
+"/media" ..> "GET /media"
+"/media" ..> "POST /media"
+"/media" ..> "PUT /media"
+
+
+
+interface "/media/stream" {
+}
+
+class "GET /media/stream" {
+.. header ..
+{field} string userId
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+class "POST /media/stream" {
+.. header ..
+{field} string <b>userId</b>
+{field} string authToken
+.. query ..
+{field} string <b>mediaId</b>
+.. responses ..
+200: {field} application/json 
+}
+
+
+
+"/media/stream" ..> "GET /media/stream"
+"/media/stream" ..> "POST /media/stream"
+
+
+class User {
+    {field} string userId
+    {field} string role {"customer", "instructor"}
+    {field} string[] subscriptions
+}
+
+
+
+class UpdateUserRequest {
+    {field} string displayName
+    {field} integer zipCode
+    {field} string[] subscriptions
+}
+
+
+
+class LoginResponse {
+    {field} string userId
+    {field} string role {"customer", "instructor"}
+    {field} string authToken {"woeihvopwrethv24509gv24jtv0"}
+}
+
+
+
+class AddToSchedule {
+    {field} string userId
+    {field} string startTime {"06-06-2020 12:00:00 UTC"}
+    {field} string endTime {"06-06-2020 13:00:00 UTC"}
+}
+
+
+
+class ScheduleData {
+    {field} string userId
+    {field} string startTime {"06-06-2020 12:00:00 UTC"}
+    {field} string endTime {"06-06-2020 13:00:00 UTC"}
+}
+
+
+
+class MeetingInformation {
+    {field} string meetingId
+    {field} string startTime {"06-06-2020 12:00:00 UTC"}
+    {field} string endTime {"06-06-2020 13:00:00 UTC"}
+    {field} string[] users
+}
+
+
+
+class UpdateMeetingRequest {
+    {field} string startTime {"06-06-2020 12:00:00 UTC"}
+    {field} string endTime {"06-06-2020 13:00:00 UTC"}
+    {field} string[] users
+}
+
+
+@enduml

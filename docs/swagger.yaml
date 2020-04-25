@@ -1,0 +1,1016 @@
+openapi: 3.0.0
+info:
+  title: NEUFIT
+  description: Public API for NEUFIT application
+  version: 1.0.0
+servers:
+  - url: https://example.nuefit.com
+    description: example api base url
+tags:
+  - name: User
+    description: User and profile services
+  - name: Authentication
+    description: Manage authentication session
+  - name: Meeting
+    description: The live streaming video meeting service
+  - name: Scheduling
+    description: The live streaming video meeting service
+  - name: Media
+    description: The service for creating and accessing media
+paths:
+  /user:
+    get:
+      tags:
+        - User
+      summary: Returns information on a user
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of either a customer or instructor
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          description: If valid auth token for requested user, all user information is returned. Otherwise public user profile is returned
+          required: false
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+      responses:
+        '200':
+          description: user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags:
+        - User
+      summary: update user information
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of either a customer or instructor
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: userPassword
+          required: true
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+        - in: header
+          name: authToken
+          required: true
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+        # - in: body
+        #   name: displayName
+        #   schema:
+        #     type: string
+        #     enum: [jeff]
+        #     example: jeff
+        # - in: body
+        #   name: zipCode
+        #   schema:
+        #     type: integer
+        #     enum: [28222]
+        #     example: 28222
+        # - in: body
+        #   name: subscriptions
+        #   description: topics the user is subscribed to
+        #   schema:
+        #     type: array
+        #     items:
+        #       type: string
+        #       description: a user id or topic
+        #       example: instructorId_5
+        #     example:
+        #       - instructorId_2
+        #       - instructorId_4
+        #       - beginners_yoga
+      requestBody:
+        description: user information to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: successful update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      tags:
+        - User
+      summary: create user
+      parameters:
+        - in: header
+          name: userId
+          description: the unused user id for the user to create
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: userPassword
+          required: true
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+      requestBody:
+        description: user information to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: successful creation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - User
+      summary: delete user
+      parameters:
+        - in: header
+          name: userId
+          description: the user to delete
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: userPassword
+          required: true
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+        - in: header
+          name: authToken
+          required: true
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+      responses:
+        '200':
+          description: successful creation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /auth:
+    get:
+      tags:
+        - Authentication
+      summary: Retrieve all authentication sessions for a user
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of either a customer or instructor
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: userPassword
+          required: true
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+        - in: header
+          name: authToken
+          required: false
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+      responses:
+        '200':
+          description: Authenticated session token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+    put:
+      tags:
+        - Authentication
+      summary: keep alive for authentication session
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of either a customer or instructor
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          required: true
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+      responses:
+        '200':
+          description: Authenticated session token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+    post:
+      tags:
+        - Authentication
+      summary: Initializes an authentication session
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of either a customer or instructor
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: userPassword
+          required: true
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+      responses:
+        '200':
+          description: Authenticated session token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+    delete:
+      tags:
+        - Authentication
+      summary: Ends an authentication session
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of either a customer or instructor
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: userPassword
+          required: true
+          schema:
+            type: string
+            enum: [somePASSWORD110]
+            example: somePASSWORD110
+      responses:
+        '200':
+          description: logout was successful
+          content:
+            application/json:
+              schema: {}
+  /meet:
+    get:
+      tags:
+        - Meeting
+      summary: Get meeting data
+      parameters:
+        - in: query
+          name: meetingId
+          required: true
+          schema:
+            type: string
+            example: f0293jf092j3409fj203jf23904jf
+        - in: header
+          name: userId
+          required: false
+          schema:
+            type: string
+            example: instructorId_2
+        - in: header
+          name: authToken
+          required: false
+          schema:
+            type: string
+            example: r4lri234r234uhir23iu4r
+      responses:
+        '200':
+          description: Meeting successfully joined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingInformation'
+    put:
+      tags:
+        - Meeting
+      summary: Update meeting data
+      parameters:
+        - in: query
+          name: meetingId
+          required: true
+          schema:
+            type: string
+            example: f0293jf092j3409fj203jf23904jf
+        - in: header
+          name: userId
+          required: false
+          schema:
+            type: string
+            example: instructorId_2
+        - in: header
+          name: authToken
+          required: true
+          schema:
+            type: string
+            example: r4lri234r234uhir23iu4r
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMeetingRequest"
+      responses:
+        '200':
+          description: Meeting successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      tags:
+        - Meeting
+      summary: join a group workout or one on one workout
+      parameters:
+        - in: query
+          name: meetingId
+          required: true
+          schema:
+            type: string
+            example: f0293jf092j3409fj203jf23904jf
+        - in: header
+          name: userId
+          required: true
+          schema:
+            type: string
+            example: instructorId_2
+        - in: header
+          name: authToken
+          required: false
+          schema:
+            type: string
+            example: r4lri234r234uhir23iu4r
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callbackUrl:
+                  type: string
+                  format: uri
+                  example: https://api.neufit.com/register-meeting/
+              required:
+                - callbackUrl
+      callbacks:
+        streamVideo:
+          '{$request.body#/callbackUrl}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: handle streaming video data through a web hook
+                      required:
+                        - message
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+      responses:
+        '200':
+          description: Meeting successfully joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /schedule:
+    get:
+      tags:
+        - Scheduling
+      summary: Returns all future schedule data for a user
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the requesting user
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          description: authToken of the requesting user
+          required: true
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+        - in: query
+          name: range
+          description: the number of days into the future the retrieved data should reflect
+          required: false
+          schema:
+            type: integer
+            example: 7
+      responses:
+        '200':
+          description: user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleData'
+    post:
+      tags:
+        - Scheduling
+      summary: put an event on someone's calendar
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the person requesting the action
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          required: true
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddToSchedule'
+      responses:
+        '200':
+          description: successful addition to schedule
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      tags:
+        - Scheduling
+      summary: update an event on someone's calendar, including your own
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the person requesting the action
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          required: true
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddToSchedule'
+      responses:
+        '200':
+          description: successful addition to schedule
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - Scheduling
+      summary: remove an event  someone's calendar, including your own
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the person requesting the action
+          required: true
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          required: true
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+      responses:
+        '200':
+          description: successful addition to schedule
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /media:
+    get:
+      tags:
+        - Media
+      summary: retrieve an image or a video
+      description: some videos and images may require authentication, others may not
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          description: authToken of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+        - in: query
+          name: mediaId
+          description: the id of the image to retrieve
+          required: true
+          schema:
+            type: string
+            example: 2r9fj240rg
+      responses:
+        '200':
+          description: user information
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+            video/*:
+              schema:
+                type: string
+                format: binary
+    post:
+      tags:
+        - Media
+      summary: upload an image or a video
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          description: authToken of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+      requestBody:
+        content:
+          image/*:
+            schema:
+              type: string
+              format: binary
+          video/*:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: upload successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: SUCCESS
+                  destination:
+                    type: string
+                    description: the url the media was uploaded to
+                    example: https://neu.fit/42f3r0cm923r09cj
+    put:
+      tags:
+        - Media
+      summary: update an image or a video
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          description: authToken of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+        - in: query
+          name: mediaId
+          description: the id of the image to retrieve
+          required: true
+          schema:
+            type: string
+            example: 2r9fj240rg
+      requestBody:
+        content:
+          image/*:
+            schema:
+              type: string
+              format: binary
+          video/*:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: upload successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: SUCCESS
+                  destination:
+                    type: string
+                    description: the url the media was updated at
+                    example: https://neu.fit/42f3r0cm923r09cj
+    delete:
+      tags:
+        - Media
+      summary: delete an image or a video
+      parameters:
+        - in: header
+          name: userId
+          description: the user id of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [customerId_1, instructorId_2]
+            example: customerId_1
+        - in: header
+          name: authToken
+          description: authToken of the requesting user
+          required: false
+          schema:
+            type: string
+            enum: [r4lri234r234uhir23iu4r]
+            example: r4lri234r234uhir23iu4r
+        - in: query
+          name: mediaId
+          description: the id of the image to retrieve
+          required: true
+          schema:
+            type: string
+            example: 2r9fj240rg
+      responses:
+        '200':
+          description: deletion successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: SUCCESS
+                  destination:
+                    type: string
+                    description: the url the media was deleted from
+                    example: https://neu.fit/42f3r0cm923r09cj
+  /media/stream:
+    get:
+      tags:
+        - Stream
+      summary: Get data about streaming media
+      parameters:
+        - in: query
+          name: mediaId
+          required: true
+          schema:
+            type: string
+            example: f0293jf092j3409fj203jf23904jf
+        - in: header
+          name: userId
+          required: false
+          schema:
+            type: string
+            example: instructorId_2
+        - in: header
+          name: authToken
+          required: false
+          schema:
+            type: string
+            example: r4lri234r234uhir23iu4r
+      responses:
+        '200':
+          description: Stream data found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mediaId:
+                    type: string
+                    example: f0293jf092j3409fj203jf23904jf
+                  runtime:
+                    type: integer
+                    description: runtime in milliseconds
+                    example: 23485023
+                  metadata:
+                    type: object
+                    description: media metadata
+                    example: {}
+    post:
+      tags:
+        - Stream
+      summary: Start a datastream with the server to access a piece of media
+      parameters:
+        - in: query
+          name: mediaId
+          required: true
+          schema:
+            type: string
+            example: f0293jf092j3409fj203jf23904jf
+        - in: header
+          name: userId
+          required: true
+          schema:
+            type: string
+            example: instructorId_2
+        - in: header
+          name: authToken
+          required: false
+          schema:
+            type: string
+            example: r4lri234r234uhir23iu4r
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callbackUrl:
+                  type: string
+                  format: uri
+                  example: https://neu.fit/stream/f0293jf092j3409fj203jf23904jf
+              required:
+                - callbackUrl
+      callbacks:
+        streamVideo:
+          '{$request.body#/callbackUrl}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: handle streaming video data through a web hook
+                      required:
+                        - message
+              responses:
+                '200':
+                  description: Your server returns this code if it accepts the callback
+      responses:
+        '200':
+          description: Meeting successfully joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: customerId_1
+        role:
+          type: string
+          enum: [customer, instructor]
+          example: customer
+        subscriptions:
+          type: array
+          description: the instructors subscribed to
+          items:
+            type: string
+            description: a user id
+            example: instructorId_5
+          example:
+            - instructorId_2
+            - instructorId_3
+            - instructorId_4
+            - customerId_4
+    UpdateUserRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
+          example: Jeff
+        zipCode:
+          type: integer
+          example: 28222
+        subscriptions:
+          type: array
+          description: topics the user is subscribed to
+          items:
+            type: string
+            description: a user id or topic
+            example: instructorId_5
+          example:
+            - instructorId_2
+            - instructorId_4
+            - beginners_yoga
+    LoginResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: customerId_1
+        role:
+          type: string
+          enum: [customer, instructor]
+          example: customer
+        authToken:
+          type: string
+          description: a token for associating requests with a login session
+          enum: [woeihvopwrethv24509gv24jtv0]
+          example: woeihvopwrethv24509gv24jtv0
+    AddToSchedule:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: the user's schedule to update
+          example: instructorId_5
+        startTime:
+          type: string
+          description: stringified timestamp of when to start the event
+          enum: ["06-06-2020 12:00:00 UTC"]
+          example: "06-06-2020 12:00:00 UTC"
+        endTime:
+          type: string
+          description: stringified timestamp of when to end the event
+          enum: ["06-06-2020 13:00:00 UTC"]
+          example: "06-06-2020 13:00:00 UTC"
+    ScheduleData:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: the user id corresponding to the returned data
+          example: instructorId_5
+        startTime:
+          type: string
+          description: stringified timestamp of when to start the event
+          enum: ["06-06-2020 12:00:00 UTC"]
+          example: "06-06-2020 12:00:00 UTC"
+        endTime:
+          type: string
+          description: stringified timestamp of when to end the event
+          enum: ["06-06-2020 13:00:00 UTC"]
+          example: "06-06-2020 13:00:00 UTC"
+    MeetingInformation:
+      type: object
+      properties:
+        meetingId:
+          type: string
+          description: the meeting id
+          example: rtvretbv30-irtb34it90vb34tb
+        startTime:
+          type: string
+          description: stringified timestamp of when to start the meeting
+          enum: ["06-06-2020 12:00:00 UTC"]
+          example: "06-06-2020 12:00:00 UTC"
+        endTime:
+          type: string
+          description: stringified timestamp of when to end the meeting
+          enum: ["06-06-2020 13:00:00 UTC"]
+          example: "06-06-2020 13:00:00 UTC"
+        users:
+          type: array
+          description: the users currently in the meeting
+          items:
+            type: string
+            description: a user id or topic
+            example: instructorId_5
+          example:
+            instructorId_5
+            customerId_1
+            customerId_5
+            customerId_3
+    UpdateMeetingRequest:
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: stringified timestamp of when to start the meeting
+          enum: ["06-06-2020 12:00:00 UTC"]
+          example: "06-06-2020 12:00:00 UTC"
+        endTime:
+          type: string
+          description: stringified timestamp of when to end the meeting
+          enum: ["06-06-2020 13:00:00 UTC"]
+          example: "06-06-2020 13:00:00 UTC"
+        users:
+          type: array
+          description: the users currently in the meeting
+          items:
+            type: string
+            description: a user id
+            example: instructorId_5
+          example:
+            - instructorId_5
+            - customerId_1
+            - customerId_5
+            - customerId_3
