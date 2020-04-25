@@ -1,24 +1,162 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>ReDoc</title>
-    <!-- needed for adaptive design -->
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+<html lang="en">
 
-    <!--
-    ReDoc doesn't change outer page styles
-    -->
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <redoc spec-url='./swagger.yaml'></redoc>
-    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: helvetica;
+      margin-top: 80px;
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+
+    a {
+      text-decoration: none;
+      color: gray;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+      /*   border: 1px solid red; */
+    }
+
+    .fixed-nav-bar {
+      position: fixed;
+      align-items: flex-end;
+      justify-content: flex-end;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      width: 100%;
+      height: 50px;
+      background-color: white;
+      box-shadow: 0px 0px 10px gray;
+      display: flex;
+      line-height: 50px;
+    }
+
+    nav img {
+      height: 50px;
+    }
+
+    nav .brand {
+      flex: 1;
+      align-self: flex-start;
+      height: 50px;
+      margin-left: 10px;
+    }
+
+    nav .link {
+      flex: 1;
+      max-width: max-content;
+      margin-right: 40px;
+    }
+
+    .page-container {
+      margin-top: 50px;
+      margin-bottom: 100px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .page-container>.post {
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .post>.link {
+      text-align: center;
+      font-family: courier;
+      font-size: 2.5em;
+      font-weight: lighter;
+      margin: 50px 0px;
+    }
+
+    a:hover {
+      color: black;
+    }
+
+    embed.main-doc {
+      width: 100vw;
+      height: 100vh;
+      display: none;
+    }
+    .embed-heading:not(:target) {
+      display: none;
+    }
+
+    .embed-heading:target+embed.main-doc {
+      display: initial;
+    }
+
+    .hero-text-landing:not(:target) {
+      display: none;
+    }
+
+    .hero-text-landing {
+      width: 100%;
+      height: 80vh;
+      text-align: center;
+      /* margin-top: 45vh; */
+      font-size: 32px;
+      overflow: hidden;
+      /* position: absolute; */
+      /* z-index: -1; */
+    }
+
+  </style>
+  <script>
+    if (!window.location.hash) {
+      window.location.hash = "default"
+    }
+  </script>
+</head>
+
+<body>
+  <nav class="fixed-nav-bar">
+    <a class="brand" href="/neufit-design/#default">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Poundexclam.svg/2000px-Poundexclam.svg.png" />
+    </a>
+    <a class="link" href="/neufit-design/#editor">Swagger Editor</a>
+    <a class="link" href="/neufit-design/#static">Simple static API doc</a>
+    <a class="link" href="/neufit-design/#redoc">Ruby generated API doc</a>
+    <a class="link" href="/neufit-design/#multitab">Multitab API doc</a>
+    <a class="link" href="/neufit-design/#raw">Raw openapi spec</a>
+  </nav>
+  <div id="default" class="hero-text-landing">
+    <p>
+      Please select a page from the nav menu
+    </p>
+  </div>
+  <div class="container">
+    <h2 class="embed-heading" id="editor">Swagger Editor</h2>
+    <embed class="main-doc" src="/neufit-design/src/editor/index.html">
+  </div>
+  <div class="container">
+    <h2 class="embed-heading" id="multitab">Multitab API doc</h2>
+    <embed class="main-doc" src="/neufit-design/src/multitab/index.html">
+  </div>
+  <div class="container">
+    <h2 class="embed-heading" id="redoc">Ruby generated API doc</h2>
+    <embed class="main-doc" src="/neufit-design/src/redoc/index.html">
+  </div>
+  <div class="container">
+    <h2 class="embed-heading" id="static">Simple static API doc</h2>
+    <embed class="main-doc" src="/neufit-design/src/static/index.html">
+  </div>
+  <div class="container">
+    <h2 class="embed-heading" id="raw">Raw openapi spec</h2>
+    <embed class="main-doc" src="swagger.yaml">
+  </div>
+</body>
+
 </html>
